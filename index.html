@@ -48,16 +48,22 @@
       <div class="col-md-12">
         <h2 data-bind="text: title"></h2>
         <ul class="list-group" data-bind="foreach: eventsData">
-          <li data-bind="text: title" class="list-group-item"></li>
+          <li data-bind="
+            text: title,
+            click: $root.setActiveEvent,
+            css: { active: $root.activeEventId() === id }
+            " class="list-group-item"></li>
         </ul>
       </div>
     </div>
   </div>
+
   <script>
     function WorkshopViewModel() {
       var self = this;
       this.title = "CDH Workshops";
       this.eventsData = ko.observable();
+      this.activeEventId = ko.observable();
 
       // behavior functions
       this.getEvents = function() {
@@ -66,6 +72,11 @@
           self.eventsData(data.events);
         });
       }
+
+      this.setActiveEvent = function(event) {
+        this.activeEventId(event.id);
+        console.log(this.activeEventId);
+      }.bind(this);
 
       // init
       this.getEvents();
